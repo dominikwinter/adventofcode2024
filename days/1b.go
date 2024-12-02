@@ -2,15 +2,16 @@ package days
 
 import (
 	"adventofcode2024/lib"
+	"bufio"
 	"strconv"
 	"strings"
 )
 
-func Day1B(file string) {
+func Day1B(scanner *bufio.Scanner) {
 	lefts := make([]int, 0)
 	rights := make([]int, 0)
 
-	err := lib.File(file, func(line string) error {
+	err := lib.Scan(scanner, func(line string) error {
 		cells := strings.Split(line, "   ")
 
 		left, err := strconv.Atoi(cells[0])

@@ -2,16 +2,17 @@ package days
 
 import (
 	"adventofcode2024/lib"
+	"bufio"
 	"slices"
 	"strconv"
 	"strings"
 )
 
-func Day1A(file string) {
+func Day1A(scanner *bufio.Scanner) {
 	lefts := make([]int, 0)
 	rights := make([]int, 0)
 
-	err := lib.File(file, func(line string) error {
+	err := lib.Scan(scanner, func(line string) error {
 		var err error
 		var left int
 		var right int
