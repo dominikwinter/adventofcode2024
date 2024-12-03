@@ -19,7 +19,7 @@ func Day3A(scanner *bufio.Scanner) {
 		println(err.Error())
 	}
 
-	re := regexp.MustCompile(`mul\((?<x>\d{1,3}),(?<y>\d{1,3})\)`)
+	re := regexp.MustCompile(`mul\((\d{1,3}),(\d{1,3})\)`)
 	matches := re.FindAllStringSubmatch(context, -1)
 
 	sum := 0
