@@ -24,10 +24,9 @@ Commands:
 	file := os.Args[2]
 
 	dayFunc := map[string]func(*bufio.Scanner){
-		"1a": day01.Day1A,
-		"1b": day01.Day1B,
-		"2a": day01.Day2A,
-		"2b": day01.Day2B,
+		"1a": day01.Day1A, "1b": day01.Day1B,
+		"2a": day01.Day2A, "2b": day01.Day2B,
+		"3a": day01.Day3A, "3b": day01.Day3B,
 	}
 
 	if fn, ok := dayFunc[day]; ok {
