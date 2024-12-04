@@ -1,6 +1,5 @@
 #!/bin/bash
 DAY=$1
 STEP=$2
-EX=$3
 
-go run main.go "${DAY}${STEP}" "input/${DAY}${EX}.txt"
+go run "days/${DAY}/${STEP}/main.go" < "days/${DAY}/${STEP}/input.txt"

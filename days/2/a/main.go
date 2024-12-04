@@ -1,36 +1,42 @@
-package days
+package main
 
 import (
 	"adventofcode2024/lib"
 	"bufio"
 	"fmt"
-	"strconv"
+	"os"
 	"strings"
 )
 
-func Day2A(scanner *bufio.Scanner) {
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	var input []string
+
+	for scanner.Scan() {
+		input = append(input, scanner.Text())
+	}
+
+	result := Run(input)
+
+	fmt.Printf("%v\n", result)
+}
+
+func Run(input []string) any {
 	safeCnt := 0
 
-	err := lib.Scan(scanner, func(line string) error {
+	for _, line := range input {
+		var dir string
 		fmt.Printf("line: %v\n", line)
 
 		cells := strings.Split(line, " ")
 		row := make([]int, len(cells))
+		isSafe := true
 
 		fmt.Printf("cells: %v\n", cells)
 
-		var dir string
-
-		isSafe := true
-
 		for i, cell := range cells {
-			num, err := strconv.Atoi(cell)
-
-			if err != nil {
-				return err
-			}
-
-			row[i] = num
+			row[i] = lib.ToInt(cell)
 
 			if i > 0 {
 				diff := row[i] - row[i-1]
@@ -72,14 +78,7 @@ func Day2A(scanner *bufio.Scanner) {
 		}
 
 		fmt.Printf("safe: %v - %v\n", isSafe, safeCnt)
-
-		return nil
-	})
-
-	if err != nil {
-		println(err.Error())
-		return
 	}
 
-	fmt.Printf("%v\n", safeCnt)
+	return safeCnt
 }

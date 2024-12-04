@@ -1,31 +1,34 @@
-package days
+package main
 
 import (
 	"adventofcode2024/lib"
 	"bufio"
 	"fmt"
-	"strconv"
+	"os"
 	"strings"
 )
 
-func Day2B(scanner *bufio.Scanner) {
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	var input []string
+
+	for scanner.Scan() {
+		input = append(input, scanner.Text())
+	}
+
+	result := Run(input)
+
+	fmt.Printf("%v\n", result)
+}
+
+func Run(input []string) any {
 	safeCnt := 0
 
-	err := lib.Scan(scanner, func(line string) error {
+	for _, line := range input {
 		fmt.Printf("%v\n", line)
 
-		cells := make([]int, 0)
-
-		// split by space, convert to int and append to cells
-		for _, cell := range strings.Split(line, " ") {
-			num, err := strconv.Atoi(cell)
-			if err != nil {
-				return err
-			}
-			cells = append(cells, num)
-		}
-
-		// default check
+		cells := lib.SliceToInts(strings.Split(line, " "))
 		save := check(cells)
 
 		// tolerate check: Problem Dampener
@@ -43,16 +46,9 @@ func Day2B(scanner *bufio.Scanner) {
 		if save {
 			safeCnt++
 		}
-
-		return nil
-	})
-
-	if err != nil {
-		println(err.Error())
-		return
 	}
 
-	fmt.Printf("%v\n", safeCnt)
+	return safeCnt
 }
 
 func check(cells []int) bool {
@@ -60,6 +56,7 @@ func check(cells []int) bool {
 
 	var dir string
 
+	// loop to second last element
 	for i := 0; i < len(cells)-1; i++ {
 		curr := cells[i]
 		next := cells[i+1]

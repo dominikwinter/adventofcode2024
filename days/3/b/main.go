@@ -1,23 +1,32 @@
-package days
+package main
 
 import (
 	"adventofcode2024/lib"
 	"bufio"
 	"fmt"
+	"os"
 	"regexp"
-	"strconv"
 )
 
-func Day3B(scanner *bufio.Scanner) {
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	var input []string
+
+	for scanner.Scan() {
+		input = append(input, scanner.Text())
+	}
+
+	result := Run(input)
+
+	fmt.Printf("%v\n", result)
+}
+
+func Run(input []string) any {
 	context := ""
 
-	err := lib.Scan(scanner, func(line string) error {
+	for _, line := range input {
 		context += line
-		return nil
-	})
-
-	if err != nil {
-		println(err.Error())
 	}
 
 	re := regexp.MustCompile(`(do\(\)|don't\(\))|(mul\((\d{1,3}),(\d{1,3})\))`)
@@ -40,18 +49,11 @@ func Day3B(scanner *bufio.Scanner) {
 			continue
 		}
 
-		x, err := strconv.Atoi(match[3])
-		if err != nil {
-			println(err.Error())
-		}
-
-		y, err := strconv.Atoi(match[4])
-		if err != nil {
-			println(err.Error())
-		}
+		x := lib.ToInt(match[3])
+		y := lib.ToInt(match[4])
 
 		sum += x * y
 	}
 
-	fmt.Printf("%v\n", sum)
+	return sum
 }
