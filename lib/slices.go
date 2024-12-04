@@ -27,7 +27,7 @@ func Transpose[T any](matrix [][]T, steps int) [][]T {
 		return matrix
 	}
 
-	for step := 0; step < steps; step++ {
+	for range steps {
 		n := len(matrix)
 		m := len(matrix[0])
 
@@ -56,7 +56,7 @@ func TransposeStrings(matrix []string, steps int) []string {
 		return matrix
 	}
 
-	for step := 0; step < steps; step++ {
+	for range steps {
 		n := len(matrix)
 		m := len(matrix[0])
 
@@ -94,9 +94,9 @@ func TransposeDiagonalStrings(input []string) []string {
 
 	output := make([]string, height+width-1)
 
-	for i := 0; i < height; i++ {
-		for j := 0; j < width; j++ {
-			output[i+j] += input[i][j : j+1]
+	for i := range height {
+		for k := range width {
+			output[i+k] += input[i][k : k+1]
 		}
 	}
 

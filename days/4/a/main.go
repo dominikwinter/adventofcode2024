@@ -40,10 +40,11 @@ func Run(input []string) any {
 }
 
 func search(input []string, word string) int {
+	drow := lib.Reverse(word)
 	count := 0
 
 	for _, line := range input {
-		count += strings.Count(line, word) + strings.Count(line, lib.Reverse(word))
+		count += strings.Count(line, word) + strings.Count(line, drow)
 	}
 
 	return count

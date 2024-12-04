@@ -49,7 +49,6 @@ func TestRemove(t *testing.T) {
 		})
 	}
 }
-
 func TestTranspose(t *testing.T) {
 	type args struct {
 		matrix [][]int
@@ -224,6 +223,54 @@ func TestTransposeDiagonalStrings(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := TransposeDiagonalStrings(tt.args.input); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("TransposeDiagonalStrings() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+func TestSliceToInts(t *testing.T) {
+	type args struct {
+		list []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "Valid integers",
+			args: args{list: []string{"1", "2", "3"}},
+			want: []int{1, 2, 3},
+		},
+		{
+			name: "Empty list",
+			args: args{list: []string{}},
+			want: []int{},
+		},
+		{
+			name: "List with negative integers",
+			args: args{list: []string{"-1", "-2", "-3"}},
+			want: []int{-1, -2, -3},
+		},
+		{
+			name: "List with mixed valid and invalid integers",
+			args: args{list: []string{"1", "a", "3"}},
+			want: []int{1, 0, 3},
+		},
+		{
+			name: "List with all invalid integers",
+			args: args{list: []string{"a", "b", "c"}},
+			want: []int{0, 0, 0},
+		},
+		{
+			name: "List with empty strings",
+			args: args{list: []string{"", "", ""}},
+			want: []int{0, 0, 0},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SliceToInts(tt.args.list); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SliceToInts() = %v, want %v", got, tt.want)
 			}
 		})
 	}

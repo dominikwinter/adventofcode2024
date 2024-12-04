@@ -22,28 +22,37 @@ func main() {
 }
 
 func Run(input []string) any {
-	count := search(input)
+	count := search(input) // 0
 
 	input = lib.TransposeStrings(input, 1)
-	count += search(input)
+	count += search(input) // 90
 
 	input = lib.TransposeStrings(input, 1)
-	count += search(input)
+	count += search(input) // 180
 
 	input = lib.TransposeStrings(input, 1)
-	count += search(input)
+	count += search(input) // 270
 
 	return count
 }
 
+/**
+ * Search in matrix this pattern:
+ *
+ *   M * S
+ *   * A *
+ *   M * S
+ *
+ * where * could be any character
+ */
 func search(input []string) int {
 	count := 0
 
 	for y := 0; y < len(input)-2; y++ {
 		for x := 0; x < len(input[y])-2; x++ {
-			if string(input[y][x]) == "M" && string(input[y][x+2]) == "S" &&
-				string(input[y+1][x+1]) == "A" &&
-				string(input[y+2][x]) == "M" && string(input[y+2][x+2]) == "S" {
+			if input[y][x] == 'M' && input[y][x+2] == 'S' &&
+				input[y+1][x+1] == 'A' &&
+				input[y+2][x] == 'M' && input[y+2][x+2] == 'S' {
 				count++
 			}
 		}
