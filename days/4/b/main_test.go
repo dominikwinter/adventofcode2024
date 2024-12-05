@@ -23,9 +23,7 @@ const WANT = 9
 
 func TestRun(t *testing.T) {
 	t.Run("Test", func(t *testing.T) {
-		input := strings.Split(strings.TrimSpace(INPUT), "\n")
-
-		if got := Run(input); !reflect.DeepEqual(got, WANT) {
+		if got := Run(strings.TrimSpace(INPUT)); !reflect.DeepEqual(got, WANT) {
 			t.Errorf("Run() = %v, want %v", got, WANT)
 		}
 	})

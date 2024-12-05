@@ -1,5 +1,7 @@
 package lib
 
+import "strings"
+
 func Reverse(str string) string {
 	result := ""
 
@@ -24,4 +26,28 @@ func AllIndexes(str string, sub string) []int {
 	}
 
 	return result
+}
+
+func SplitLines(str string) []string {
+	return strings.Split(str, "\n")
+}
+
+func StrToStrMatrix(str string, sep string) [][]string {
+	var matrix [][]string
+
+	for _, line := range SplitLines(str) {
+		matrix = append(matrix, strings.Split(line, sep))
+	}
+
+	return matrix
+}
+
+func StrToIntMatrix(str string, sep string) [][]int {
+	var matrix [][]int
+
+	for _, line := range SplitLines(str) {
+		matrix = append(matrix, SliceToInts(strings.Split(line, sep)))
+	}
+
+	return matrix
 }

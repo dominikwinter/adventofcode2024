@@ -2,83 +2,52 @@ package main
 
 import (
 	"adventofcode2024/lib"
-	"bufio"
 	"fmt"
 	"os"
-	"strings"
 )
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	var input []string
-
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	result := Run(input)
-
-	fmt.Printf("%v\n", result)
+	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
 }
 
-func Run(input []string) any {
-	safeCnt := 0
+func Run(input string) any {
+	failed := 0
+	lines := lib.StrToIntMatrix(input, " ")
 
-	for _, line := range input {
-		var dir string
+	for _, line := range lines {
 		fmt.Printf("line: %v\n", line)
 
-		cells := strings.Split(line, " ")
-		row := make([]int, len(cells))
-		isSafe := true
+		asc := lib.GetSorted(line)
+		desc := lib.GetReverse(asc)
 
-		fmt.Printf("cells: %v\n", cells)
-
-		for i, cell := range cells {
-			row[i] = lib.ToInt(cell)
+		for i, curr := range line {
+			if curr != asc[i] && curr != desc[i] {
+				failed++
+				fmt.Printf("invalid sequence: %v\n", curr)
+				break
+			}
 
 			if i > 0 {
-				diff := row[i] - row[i-1]
+				diff := line[i] - line[i-1]
 
-				if i == 1 {
-					if diff > 0 {
-						dir = "inc"
-					} else {
-						dir = "dec"
-					}
-				}
-
-				if i > 1 {
-					if (dir == "inc" && diff < 0) || (dir == "dec" && diff > 0) {
-						isSafe = false
-						fmt.Printf("Invalid sequence: changed direction: %v - %v\n", diff, dir)
-						break
-					}
+				if diff == 0 {
+					failed++
+					fmt.Printf("invalid sequence: neither an increase or a decrease\n")
+					break
 				}
 
 				abs := lib.Abs(diff)
 
-				if abs == 0 {
-					isSafe = false
-					fmt.Printf("Invalid sequence: neither an increase or a decrease: %v\n", abs)
-					break
-				}
-
 				if abs > 3 {
-					isSafe = false
-					fmt.Printf("Invalid sequence: diff to big: %v\n", abs)
+					failed++
+					fmt.Printf("invalid sequence: diff to big: %v\n", abs)
 					break
 				}
 			}
 		}
 
-		if isSafe {
-			safeCnt++
-		}
-
-		fmt.Printf("safe: %v - %v\n", isSafe, safeCnt)
+		fmt.Printf("failed: %v\nsafe: %v\n\n", failed, len(lines)-failed)
 	}
 
-	return safeCnt
+	return len(lines) - failed
 }

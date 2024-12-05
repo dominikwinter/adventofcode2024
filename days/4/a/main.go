@@ -2,38 +2,29 @@ package main
 
 import (
 	"adventofcode2024/lib"
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
 )
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	var input []string
-
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	result := Run(input)
-
-	fmt.Printf("%v\n", result)
+	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
 }
 
-func Run(input []string) any {
+func Run(input string) any {
 	const WORD = "XMAS"
 
-	count := search(input, WORD)
+	lines := lib.SplitLines(input)
 
-	inputD1 := lib.TransposeDiagonalStrings(input)
+	count := search(lines, WORD)
+
+	inputD1 := lib.TransposeDiagonalStrings(lines)
 	count += search(inputD1, WORD)
 
-	input = lib.TransposeStrings(input, 1)
-	count += search(input, WORD)
+	lines = lib.TransposeStrings(lines, 1)
+	count += search(lines, WORD)
 
-	inputD2 := lib.TransposeDiagonalStrings(input)
+	inputD2 := lib.TransposeDiagonalStrings(lines)
 	count += search(inputD2, WORD)
 
 	return count

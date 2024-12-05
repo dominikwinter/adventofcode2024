@@ -22,3 +22,7 @@ func ToInt(s string) int {
 
 	return num
 }
+
+func Scale(x, in_min, in_max, out_min, out_max float64) float64 {
+	return ((x-in_min)/(in_max-in_min))*(out_max-out_min) + out_min
+}

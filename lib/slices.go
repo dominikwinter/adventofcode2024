@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"cmp"
 	"fmt"
 	"slices"
 	"strconv"
@@ -117,4 +118,39 @@ func SliceToInts(list []string) []int {
 	}
 
 	return res
+}
+
+func Unique[S ~[]E, E cmp.Ordered](list S) S {
+	slices.Sort(list)
+	return slices.Compact(list)
+}
+
+func GetColumn[T any](matrix [][]T, col int) []T {
+	res := make([]T, len(matrix))
+
+	for i, row := range matrix {
+		res[i] = row[col]
+	}
+
+	return res
+}
+
+func GetSorted[S ~[]E, E cmp.Ordered](list S) S {
+	asc := make(S, len(list))
+
+	copy(asc, list)
+
+	slices.Sort(asc)
+
+	return asc
+}
+
+func GetReverse[S ~[]E, E cmp.Ordered](list S) S {
+	rev := make(S, len(list))
+
+	copy(rev, list)
+
+	slices.Reverse(rev)
+
+	return rev
 }

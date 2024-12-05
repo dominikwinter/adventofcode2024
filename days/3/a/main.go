@@ -2,35 +2,21 @@ package main
 
 import (
 	"adventofcode2024/lib"
-	"bufio"
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 )
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	var input []string
-
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	result := Run(input)
-
-	fmt.Printf("%v\n", result)
+	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
 }
 
-func Run(input []string) any {
-	context := ""
-
-	for _, line := range input {
-		context += line
-	}
+func Run(input string) any {
+	input = strings.ReplaceAll(input, "\n", "")
 
 	re := regexp.MustCompile(`mul\((\d{1,3}),(\d{1,3})\)`)
-	matches := re.FindAllStringSubmatch(context, -1)
+	matches := re.FindAllStringSubmatch(input, -1)
 
 	sum := 0
 

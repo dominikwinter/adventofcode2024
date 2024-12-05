@@ -2,36 +2,27 @@ package main
 
 import (
 	"adventofcode2024/lib"
-	"bufio"
 	"fmt"
 	"os"
 )
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	var input []string
-
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	result := Run(input)
-
-	fmt.Printf("%v\n", result)
+	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
 }
 
-func Run(input []string) any {
-	count := search(input) // 0
+func Run(input string) any {
+	lines := lib.SplitLines(input)
 
-	input = lib.TransposeStrings(input, 1)
-	count += search(input) // 90
+	count := search(lines) // 0
 
-	input = lib.TransposeStrings(input, 1)
-	count += search(input) // 180
+	lines = lib.TransposeStrings(lines, 1)
+	count += search(lines) // 90
 
-	input = lib.TransposeStrings(input, 1)
-	count += search(input) // 270
+	lines = lib.TransposeStrings(lines, 1)
+	count += search(lines) // 180
+
+	lines = lib.TransposeStrings(lines, 1)
+	count += search(lines) // 270
 
 	return count
 }
