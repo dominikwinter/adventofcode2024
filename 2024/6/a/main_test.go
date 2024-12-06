@@ -7,15 +7,19 @@ import (
 )
 
 const INPUT = `
-3   4
-4   3
-2   5
-1   3
-3   9
-3   3
+....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#..^.....
+........#.
+#.........
+......#...
 `
 
-const WANT = 11
+const WANT = 41
 
 func TestRun(t *testing.T) {
 	t.Run("Test", func(t *testing.T) {

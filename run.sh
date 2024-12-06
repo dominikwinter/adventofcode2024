@@ -1,5 +1,6 @@
 #!/bin/bash
-DAY=$1
-STEP=$2
+YEAR=$1
+DAY=$2
+STEP=$3
 
-go run "days/${DAY}/${STEP}/main.go" < "days/${DAY}/${STEP}/input.txt"
+go run "${YEAR}/${DAY}/${STEP}/main.go" < "${YEAR}/${DAY}/${STEP}/input.txt"

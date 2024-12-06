@@ -42,6 +42,16 @@ func StrToStrMatrix(str string, sep string) [][]string {
 	return matrix
 }
 
+func StrToRuneMatrix(str string, sep string) [][]rune {
+	var matrix [][]rune
+
+	for _, line := range SplitLines(str) {
+		matrix = append(matrix, []rune(line))
+	}
+
+	return matrix
+}
+
 func StrToIntMatrix(str string, sep string) [][]int {
 	var matrix [][]int
 
