@@ -6,10 +6,13 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
+	fmt.Printf("\nTime: %v\n", time.Since(start))
 }
 
 func Run(input string) any {
@@ -33,16 +36,16 @@ func calc(res int, nums []int) bool {
 	stack := []int{nums[0]}
 
 	for _, next := range nums[1:] {
-		newStack := []int{}
+		var newStack []int
 
 		for _, val := range stack {
-			if add := val + next; add != res {
+			if add := val + next; add != res || add > res {
 				newStack = append(newStack, add)
 			} else {
 				return true
 			}
 
-			if mul := val * next; mul != res {
+			if mul := val * next; mul != res || mul > res {
 				newStack = append(newStack, mul)
 			} else {
 				return true
@@ -53,9 +56,9 @@ func calc(res int, nums []int) bool {
 			} else {
 				return true
 			}
-
-			stack = newStack
 		}
+
+		stack = newStack
 	}
 
 	return false

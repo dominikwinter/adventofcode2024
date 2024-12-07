@@ -4,10 +4,13 @@ import (
 	"adventofcode2024/lib"
 	"fmt"
 	"os"
+	"time"
 )
 
 func main() {
+	start := time.Now()
 	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
+	fmt.Printf("\nTime: %v\n", time.Since(start))
 }
 
 type Map = [][]rune
