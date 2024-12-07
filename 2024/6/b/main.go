@@ -80,9 +80,8 @@ func isInfiniteLoop(p Point, m Map) bool {
 
 	cache := make(map[Point]bool)
 
-	// check by cache, but limit to 999999 steps, just to be on the safe side to
-	// avoid an infinite loop
-	for cnt := 0; cnt < 999999; cnt++ {
+	cnt := 0
+	for {
 		p, err = next(p, m)
 
 		if err != nil {
@@ -94,9 +93,14 @@ func isInfiniteLoop(p Point, m Map) bool {
 		}
 
 		cache[p] = true
-	}
 
-	return true
+		cnt++
+		if cnt > 999999 {
+			// check by cache, but limit to 999999 steps, just to be on the safe side to
+			// avoid an infinite loop
+			panic("something went wrong")
+		}
+	}
 }
 
 func dup(m Map) Map {

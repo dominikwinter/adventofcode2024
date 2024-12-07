@@ -30,23 +30,33 @@ func Run(input string) any {
 }
 
 func calc(res int, nums []int) bool {
-	return _inner(res, nums, 1, nums[0])
-}
+	stack := []int{nums[0]}
 
-func _inner(res int, nums []int, i int, tmp int) bool {
-	if i >= len(nums) {
-		return tmp == res
+	for _, next := range nums[1:] {
+		newStack := []int{}
+
+		for _, val := range stack {
+			if add := val + next; add != res {
+				newStack = append(newStack, add)
+			} else {
+				return true
+			}
+
+			if mul := val * next; mul != res {
+				newStack = append(newStack, mul)
+			} else {
+				return true
+			}
+
+			if con := lib.ToInt(strconv.Itoa(val) + strconv.Itoa(next)); con != res {
+				newStack = append(newStack, con)
+			} else {
+				return true
+			}
+
+			stack = newStack
+		}
 	}
 
-	next := nums[i]
-
-	if _inner(res, nums, i+1, tmp+next) {
-		return true
-	}
-
-	if _inner(res, nums, i+1, tmp*next) {
-		return true
-	}
-
-	return _inner(res, nums, i+1, lib.ToInt(strconv.Itoa(tmp)+strconv.Itoa(next)))
+	return false
 }

@@ -29,22 +29,26 @@ func Run(input string) any {
 }
 
 func calc(res int, nums []int) bool {
-	return _inner(res, nums, 1, nums[0])
-}
+	stack := []int{nums[0]}
 
-func _inner(res int, nums []int, i int, tmp int) bool {
-	if i >= len(nums) {
-		return tmp == res
-	}
+	for _, next := range nums[1:] {
+		newStack := []int{}
 
-	next := nums[i]
+		for _, val := range stack {
+			if add := val + next; add != res {
+				newStack = append(newStack, add)
+			} else {
+				return true
+			}
 
-	if _inner(res, nums, i+1, tmp+next) {
-		return true
-	}
+			if mul := val * next; mul != res {
+				newStack = append(newStack, mul)
+			} else {
+				return true
+			}
 
-	if _inner(res, nums, i+1, tmp*next) {
-		return true
+			stack = newStack
+		}
 	}
 
 	return false
