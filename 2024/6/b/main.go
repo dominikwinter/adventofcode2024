@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"sync"
+	"sync/atomic"
 )
 
 func main() {
 	fmt.Printf("%v\n", Run(lib.Read(os.Stdin)))
 }
+
+type Map [][]string
 
 type Vector struct {
 	X, Y int
@@ -20,13 +24,11 @@ type Point struct {
 	C    string
 }
 
-type Map [][]string
-
 var dir = map[string]Vector{
 	"^": {0, -1},
+	">": {1, 0},
 	"v": {0, 1},
 	"<": {-1, 0},
-	">": {1, 0},
 }
 
 var turn = map[string]string{
@@ -36,67 +38,75 @@ var turn = map[string]string{
 	"<": "^",
 }
 
-var debug = 0
-
 func Run(input string) any {
-	var err error
-
 	m := lib.StrToStrMatrix(input, "")
-	p := find(m)
-
-	var infiniteObstacles []Vector
-
-	for cnt := 0; cnt < 99999; cnt++ {
-		p, err = next(p, m)
-
-		if err != nil {
-			break
-		}
-
-		println(cnt)
-
-		// count only unique obstacles (x,y)
-		if is, obstacle := infinity(p, m); is {
-			if !slices.Contains(infiniteObstacles, obstacle) {
-				infiniteObstacles = append(infiniteObstacles, obstacle)
-			}
-		}
-	}
-
-	return len(infiniteObstacles)
-}
-
-func infinity(p Point, mOrg Map) (bool, Vector) {
-	m := duplicate(mOrg)
-	obstacle, err := next(p, m)
-	vec := Vector{obstacle.X, obstacle.Y}
+	p, err := find(m)
 
 	if err != nil {
-		return false, vec
+		panic(err)
 	}
 
-	m[obstacle.Y][obstacle.X] = "O"
+	var wg sync.WaitGroup
+	var cnt atomic.Uint32
 
-	for cnt := 0; cnt < 9999; cnt++ {
-		p, err = next(p, m)
+	for y, line := range m {
+		for x, c := range line {
+			if c != "." {
+				continue
+			}
 
-		if err != nil {
-			return false, vec
+			wg.Add(1)
+
+			go func(x, y int) {
+				defer wg.Done()
+
+				m2 := dup(m)
+				m2[y][x] = "O"
+
+				if isInfiniteLoop(p, m2) {
+					cnt.Add(1)
+				}
+			}(x, y)
 		}
 	}
 
-	return true, vec // TODO check if we are in a loop, don't guess at limit
+	wg.Wait()
+
+	return int(cnt.Load())
 }
 
-func duplicate(m Map) Map {
-	m2 := make(Map, len(m))
+func isInfiniteLoop(p Point, m Map) bool {
+	var err error
 
-	for y := range m {
-		m2[y] = make([]string, len(m[y]))
-		copy(m2[y], m[y])
+	cache := make(map[Point]bool)
+
+	// check by cache, but limit to 999999 steps, just to be on the safe side to
+	// avoid an infinite loop
+	for cnt := 0; cnt < 999999; cnt++ {
+		p, err = next(p, m)
+
+		if err != nil {
+			return false
+		}
+
+		if cache[p] {
+			return true
+		}
+
+		cache[p] = true
 	}
 
-	return m2
+	return true
+}
+
+func dup(m Map) Map {
+	d := make(Map, len(m))
+
+	for y, line := range m {
+		d[y] = slices.Clone(line)
+	}
+
+	return d
 }
 
 func next(p Point, m Map) (Point, error) {
@@ -111,39 +121,24 @@ func next(p Point, m Map) (Point, error) {
 	if m[y][x] == "#" || m[y][x] == "O" {
 		p.C = turn[p.C]
 		d = dir[p.C]
+	} else {
+		p.X += d.X
+		p.Y += d.Y
 	}
-
-	// fmt.Printf("p=%v\n", p)
-
-	p.X += d.X
-	p.Y += d.Y
 
 	return p, nil
 }
 
-func show(m Map) {
-	fmt.Printf("\n===================================\n")
-
-	for y := 0; y < len(m); y++ {
-		for x := 0; x < len(m[y]); x++ {
-			fmt.Printf("%v", m[y][x])
-		}
-		fmt.Printf("\n")
-	}
-
-	fmt.Printf("\n===================================\n")
-}
-
-func find(m Map) Point {
+func find(m Map) (Point, error) {
 	for y := 0; y < len(m); y++ {
 		for x := 0; x < len(m[y]); x++ {
 			c := m[y][x]
 
 			if c == "^" || c == ">" || c == "v" || c == "<" {
-				return Point{x, y, c}
+				return Point{x, y, c}, nil
 			}
 		}
 	}
 
-	return Point{-1, -1, ""}
+	return Point{}, fmt.Errorf("not found")
 }
