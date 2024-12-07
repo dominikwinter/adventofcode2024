@@ -114,13 +114,12 @@ func next(p Point, m Map) (Point, error) {
 	x := p.X + d.X
 	y := p.Y + d.Y
 
-	if y < 0 || y >= len(m) || x < 0 || x >= len(m[0]) {
+	if y < 0 || y >= len(m) || x < 0 || x >= len(m) || x >= len(m[0]) {
 		return Point{}, fmt.Errorf("out of bounds")
 	}
 
 	if m[y][x] == "#" || m[y][x] == "O" {
 		p.C = turn[p.C]
-		d = dir[p.C]
 	} else {
 		p.X += d.X
 		p.Y += d.Y
