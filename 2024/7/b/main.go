@@ -1,12 +1,13 @@
 package main
 
 import (
-	"adventofcode2024/lib"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	lib "github.com/dominikwinter/adventofcode2024/lib"
 )
 
 func main() {
@@ -51,7 +52,7 @@ func calc(res int, nums []int) bool {
 				return true
 			}
 
-			if con := lib.ToInt(strconv.Itoa(val) + strconv.Itoa(next)); con != res {
+			if con := lib.ToInt(strconv.Itoa(val) + strconv.Itoa(next)); con != res || con > res {
 				newStack = append(newStack, con)
 			} else {
 				return true

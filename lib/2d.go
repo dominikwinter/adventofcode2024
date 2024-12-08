@@ -1,32 +1,65 @@
 package lib
 
-type Point struct {
+type Node struct {
 	X, Y int
 }
 
-func (p *Point) Scale(factor int) {
-	p.X *= factor
-	p.Y *= factor
+func (n *Node) Copy() *Node {
+	return &Node{n.X, n.Y}
 }
 
-func (p *Point) MoveRight(d int) {
-	p.X += d
+func (n *Node) Scale(factor int) *Node {
+	n.X *= factor
+	n.Y *= factor
+
+	return n
 }
 
-func (p *Point) MoveLeft(d int) {
-	p.X -= d
+func (n *Node) MoveRight(d int) *Node {
+	n.X += d
+
+	return n
 }
 
-func (p *Point) MoveUp(d int) {
-	p.Y -= d
+func (n *Node) MoveLeft(d int) *Node {
+	n.X -= d
+
+	return n
 }
 
-func (p *Point) MoveDown(d int) {
-	p.Y += d
+func (n *Node) MoveUp(d int) *Node {
+	n.Y -= d
+
+	return n
 }
 
-func (p *Point) IsNeighborDiagonal(p2 *Point, distance int) bool {
-	dx := Abs(p.X - p2.X)
-	dy := Abs(p.Y - p2.Y)
-	return dx+dy == distance || (dx == distance && dy == distance)
+func (n *Node) MoveDown(d int) *Node {
+	n.Y += d
+
+	return n
+}
+
+func (n *Node) Forward(v *Node) *Node {
+	n.X += v.X
+	n.Y += v.Y
+
+	return n
+}
+
+func (n *Node) Backward(v *Node) *Node {
+	n.X -= v.X
+	n.Y -= v.Y
+
+	return n
+}
+
+func (n *Node) SetXY(n2 *Node) *Node {
+	n.X = n2.X
+	n.Y = n2.Y
+
+	return n
+}
+
+func (n *Node) IsInBounds(m *[][]string) bool {
+	return n.Y >= 0 && n.Y < len(*m) && n.X >= 0 && n.X < len((*m)[n.Y])
 }

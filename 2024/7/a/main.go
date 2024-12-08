@@ -1,11 +1,12 @@
 package main
 
 import (
-	"adventofcode2024/lib"
 	"fmt"
 	"os"
 	"strings"
 	"time"
+
+	lib "github.com/dominikwinter/adventofcode2024/lib"
 )
 
 func main() {
