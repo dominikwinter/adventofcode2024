@@ -54,7 +54,7 @@ func Run(input string) any {
 
 			tmp1 := Antinode{n1.Node}
 			for {
-				if !tmp1.Node.Backward(&d.Node).IsInBounds(&m) {
+				if !tmp1.Node.Backward(&d.Node).IsInBoundsStr(&m) {
 					break
 				}
 
@@ -67,7 +67,7 @@ func Run(input string) any {
 			for {
 				// happy accident, i don't know. actually a copy paste error.
 				// in fact i wanted to use Forward() here
-				if !tmp2.Node.Backward(&d.Node).IsInBounds(&m) {
+				if !tmp2.Node.Backward(&d.Node).IsInBoundsStr(&m) {
 					break
 				}
 

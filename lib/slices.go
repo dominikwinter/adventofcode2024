@@ -154,3 +154,9 @@ func GetReverse[S ~[]E, E cmp.Ordered](list S) S {
 
 	return rev
 }
+
+func UniqueAdd[S ~[]E, E comparable](s *S, v E) {
+	if !slices.Contains(*s, v) {
+		*s = append(*s, v)
+	}
+}
