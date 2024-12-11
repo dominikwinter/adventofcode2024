@@ -18,49 +18,51 @@ func main() {
 
 func Run(input string) any {
 	res := 0
-	cc := cacheCalc()
+	cache := cacheCalc()
 
 	for _, c := range strings.Split(input, " ") {
-		n := cc(lib.ToInt(c), 75)
+		n := cache(lib.ToInt(c), 75)
 		res += n
 	}
 
 	return res
 }
 
-func cacheCalc() func(int, int) int {
+type CacheCalcFn = func(int, int) int
+
+func cacheCalc() CacheCalcFn {
 	var cache = make(map[[2]int]int)
-	var calc func(int, int) int
+	var wrapper CacheCalcFn
+	var calc CacheCalcFn
 
-	calc = func(num int, n int) int {
-		if n == 0 {
-			return 1
-		}
-
+	wrapper = func(num int, n int) int {
 		key := [2]int{num, n}
 
 		if ret, ok := cache[key]; ok {
 			return ret
 		}
 
-		var result int
+		cache[key] = calc(num, n)
+		return cache[key]
+	}
 
-		if num == 0 {
-			result = calc(1, n-1)
-		} else {
-			str := strconv.Itoa(num)
-			if len(str)%2 == 0 {
-				result = 0 +
-					calc(lib.ToInt(str[:len(str)/2]), n-1) +
-					calc(lib.ToInt(str[len(str)/2:]), n-1)
-			} else {
-				result = calc(num*2024, n-1)
-			}
+	calc = func(num, n int) int {
+		if n == 0 {
+			return 1
 		}
 
-		cache[key] = result
+		if num == 0 {
+			return wrapper(1, n-1)
+		}
 
-		return result
+		str := strconv.Itoa(num)
+		if len(str)%2 == 0 {
+			return 0 +
+				wrapper(lib.ToInt(str[:len(str)/2]), n-1) +
+				wrapper(lib.ToInt(str[len(str)/2:]), n-1)
+		}
+
+		return wrapper(num*2024, n-1)
 	}
 
 	return calc
