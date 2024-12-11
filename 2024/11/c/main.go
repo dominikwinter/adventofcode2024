@@ -30,8 +30,10 @@ func Run(input string) any {
 	return res
 }
 
-func calcFn(recurse ycache.Func[[2]int, int]) ycache.Func[[2]int, int] {
-	return func(params [2]int) int {
+type CFnP = [2]int
+
+func calcFn(recurse ycache.Func[CFnP, int]) ycache.Func[CFnP, int] {
+	return func(params CFnP) int {
 		num, n := params[0], params[1]
 
 		if n == 0 {
@@ -39,16 +41,16 @@ func calcFn(recurse ycache.Func[[2]int, int]) ycache.Func[[2]int, int] {
 		}
 
 		if num == 0 {
-			return recurse([2]int{1, n - 1})
+			return recurse(CFnP{1, n - 1})
 		}
 
 		str := strconv.Itoa(num)
 		if len(str)%2 == 0 {
 			return 0 +
-				recurse([2]int{lib.ToInt(str[:len(str)/2]), n - 1}) +
-				recurse([2]int{lib.ToInt(str[len(str)/2:]), n - 1})
+				recurse(CFnP{lib.ToInt(str[:len(str)/2]), n - 1}) +
+				recurse(CFnP{lib.ToInt(str[len(str)/2:]), n - 1})
 		}
 
-		return recurse([2]int{num * 2024, n - 1})
+		return recurse(CFnP{num * 2024, n - 1})
 	}
 }
