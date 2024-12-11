@@ -61,3 +61,20 @@ func StrToIntMatrix(str string, sep string) [][]int {
 
 	return matrix
 }
+
+func GroupStr(s string) []string {
+	var list []string
+	current := ""
+
+	for i, r := range s {
+		if i > 0 && r != rune(s[i-1]) {
+			list = append(list, current)
+			current = ""
+		}
+
+		current += string(r)
+	}
+	list = append(list, current)
+
+	return list
+}
