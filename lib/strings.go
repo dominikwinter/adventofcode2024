@@ -42,6 +42,23 @@ func StrToStrMatrix(str string, sep string) [][]string {
 	return matrix
 }
 
+func ToMatrix[T any](
+	str string,
+	sep string,
+	gen func(y, x int, s string) T,
+) map[int]map[int]T {
+	matrix := make(map[int]map[int]T)
+
+	for y, line := range SplitLines(str) {
+		matrix[y] = make(map[int]T)
+		for x, s := range strings.Split(line, sep) {
+			matrix[y][x] = gen(y, x, s)
+		}
+	}
+
+	return matrix
+}
+
 func StrToRuneMatrix(str string, sep string) [][]rune {
 	var matrix [][]rune
 

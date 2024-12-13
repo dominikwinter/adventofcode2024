@@ -85,6 +85,23 @@ func (n *Node) GetNeighbors(m *[][]int) []*Node {
 	return neighbors
 }
 
+func (n *Node) GetNeighborsStr(m *[][]string) []*Node {
+	var neighbors []*Node
+
+	for _, d := range Dir {
+		neighbor := &Node{
+			Y: n.Y + d[0],
+			X: n.X + d[1],
+		}
+
+		if neighbor.IsInBoundsStr(m) {
+			neighbors = append(neighbors, neighbor)
+		}
+	}
+
+	return neighbors
+}
+
 func (n *Node) GetValue(m *[][]int) int {
 	return (*m)[n.Y][n.X]
 }
@@ -96,4 +113,12 @@ func (n *Node) IsInBounds(m *[][]int) bool {
 // TODO this sucks
 func (n *Node) IsInBoundsStr(m *[][]string) bool {
 	return n.Y >= 0 && n.Y < len(*m) && n.X >= 0 && n.X < len((*m)[n.Y])
+}
+
+func GetNode(y, x int, m *[][]Node) *Node {
+	if y >= 0 && y < len(*m) && x >= 0 && x < len((*m)[y]) {
+		return &(*m)[y][x]
+	}
+
+	return nil
 }

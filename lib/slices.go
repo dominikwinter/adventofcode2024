@@ -160,3 +160,13 @@ func UniqueAdd[S ~[]E, E comparable](s *S, v E) {
 		*s = append(*s, v)
 	}
 }
+
+func Map[I any, O any](list []I, f func(I) O) []O {
+	res := make([]O, len(list))
+
+	for i, s := range list {
+		res[i] = f(s)
+	}
+
+	return res
+}

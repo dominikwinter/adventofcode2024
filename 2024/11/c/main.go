@@ -17,23 +17,24 @@ func main() {
 	fmt.Printf("\nTime: %v\n", time.Since(start))
 }
 
+type CacheParams = [2]int
+type CacheReturn = int
+type CacheRecurse = ycache.Func[CacheParams, CacheReturn]
+
 func Run(input string) any {
 	res := 0
-
 	calc := ycache.Y(ycache.Cache(calcFn))
 
 	for _, c := range strings.Split(input, " ") {
-		n := calc([2]int{lib.ToInt(c), 75})
+		n := calc(CacheParams{lib.ToInt(c), 75})
 		res += n
 	}
 
 	return res
 }
 
-type CFnP = [2]int
-
-func calcFn(recurse ycache.Func[CFnP, int]) ycache.Func[CFnP, int] {
-	return func(params CFnP) int {
+func calcFn(recurse CacheRecurse) CacheRecurse {
+	return func(params CacheParams) CacheReturn {
 		num, n := params[0], params[1]
 
 		if n == 0 {
@@ -41,16 +42,16 @@ func calcFn(recurse ycache.Func[CFnP, int]) ycache.Func[CFnP, int] {
 		}
 
 		if num == 0 {
-			return recurse(CFnP{1, n - 1})
+			return recurse(CacheParams{1, n - 1})
 		}
 
 		str := strconv.Itoa(num)
 		if len(str)%2 == 0 {
 			return 0 +
-				recurse(CFnP{lib.ToInt(str[:len(str)/2]), n - 1}) +
-				recurse(CFnP{lib.ToInt(str[len(str)/2:]), n - 1})
+				recurse(CacheParams{lib.ToInt(str[:len(str)/2]), n - 1}) +
+				recurse(CacheParams{lib.ToInt(str[len(str)/2:]), n - 1})
 		}
 
-		return recurse(CFnP{num * 2024, n - 1})
+		return recurse(CacheParams{num * 2024, n - 1})
 	}
 }
